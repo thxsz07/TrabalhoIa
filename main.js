@@ -1,59 +1,112 @@
-:root{
-    --cor-fundo: #01080E;
-    --cor-principal: rgba(11, 13, 32, 0.8); /* efeito de vidro */
-    --cor-secundaria: #1A1C2C; 
-    --cor-destaque: #2BDEFD;
-    --cor-destaque2: #9D4EDD; /* roxo neon extra */
-    --cor-texto: #D7F9FF;
-    --sombra-neon: 0 0 10px var(--cor-destaque), 0 0 20px var(--cor-destaque2);
+const caixaPrincipal = document.querySelector(".caixa-principal");
+const caixaPerguntas = document.querySelector(".caixa-perguntas");
+const caixaAlternativas = document.querySelector(".caixa-alternativas");
+const caixaResultado = document.querySelector(".caixa-resultado");
+const textoResultado = document.querySelector(".texto-resultado");
+
+const perguntas = [
+    {
+        enunciado: "No caminho para a escola, você vê um robô entregando encomendas pela rua. O que você pensa?",
+        alternativas: [
+            {
+                texto: "Isso pode facilitar muito a vida das pessoas!",
+                afirmacao: "Acreditou que a tecnologia pode otimizar tarefas do dia a dia. "
+            },
+            {
+                texto: "Será que isso vai acabar com empregos de entregadores?",
+                afirmacao: "Refletiu sobre os impactos sociais que a automação pode gerar. "
+            }
+        ]
+    },
+    {
+        enunciado: "Durante a aula, o professor mostra um programa de IA que cria músicas em segundos. Qual sua reação?",
+        alternativas: [
+            {
+                texto: "Quero testar e criar minhas próprias músicas com IA!",
+                afirmacao: "Descobriu novas formas criativas de se expressar usando a tecnologia. "
+            },
+            {
+                texto: "Prefiro músicas criadas por pessoas, com emoção real.",
+                afirmacao: "Percebeu que a arte humana ainda tem um valor único que nenhuma máquina substitui. "
+            }
+        ]
+    },
+    {
+        enunciado: "Em um trabalho em grupo, alguém sugere usar IA para gerar todo o conteúdo da apresentação. O que você decide?",
+        alternativas: [
+            {
+                texto: "Vamos usar a IA como apoio, mas também colocar nossas ideias.",
+                afirmacao: "Soube equilibrar tecnologia com pensamento crítico. "
+            },
+            {
+                texto: "Melhor não usar, é arriscado depender só da máquina.",
+                afirmacao: "Defendeu a importância da autonomia e da originalidade no aprendizado. "
+            }
+        ]
+    },
+    {
+        enunciado: "Na feira de ciências da escola, você precisa criar um projeto. O que decide fazer?",
+        alternativas: [
+            {
+                texto: "Construir um robô simples que interaja com as pessoas.",
+                afirmacao: "Teve iniciativa de aplicar a robótica de forma divertida e educativa. "
+            },
+            {
+                texto: "Criar uma apresentação mostrando os riscos e benefícios da IA.",
+                afirmacao: "Se tornou um porta-voz da reflexão ética sobre tecnologia. "
+            }
+        ]
+    },
+    {
+        enunciado: "Anos depois, a IA está presente em quase todas as profissões. Qual caminho você escolhe seguir?",
+        alternativas: [
+            {
+                texto: "Trabalhar criando e programando novas IAs.",
+                afirmacao: "Se tornou um profissional de ponta no desenvolvimento tecnológico. "
+            },
+            {
+                texto: "Ajudar pessoas a entenderem e usarem a IA de forma consciente.",
+                afirmacao: "Virou referência em educação digital e ética tecnológica. "
+            }
+        ]
+    },
+];
+
+let atual = 0;
+let perguntaAtual;
+let historiaFinal = "";
+
+function mostraPergunta() {
+    if (atual >= perguntas.length) {
+        mostraResultado();
+        return;
+    }
+    perguntaAtual = perguntas[atual];
+    caixaPerguntas.textContent = perguntaAtual.enunciado;
+    caixaAlternativas.textContent = "";
+    mostraAlternativas();
 }
 
-body {
-    background: radial-gradient(circle at top, #050A18, #01080E);
-    color: var(--cor-texto);
-    font-family: 'Orbitron', sans-serif; /* fonte futurista */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+function mostraAlternativas(){
+    for(const alternativa of perguntaAtual.alternativas) {
+        const botaoAlternativas = document.createElement("button");
+        botaoAlternativas.textContent = alternativa.texto;
+        botaoAlternativas.addEventListener("click", () => respostaSelecionada(alternativa));
+        caixaAlternativas.appendChild(botaoAlternativas);
+    }
 }
 
-.caixa-principal{
-    background: var(--cor-principal);
-    backdrop-filter: blur(10px); /* efeito vidro */
-    border: 1px solid rgba(43, 222, 253, 0.2);
-    box-shadow: var(--sombra-neon);
-    width: 90%;
-    max-width: 600px;
-    text-align: center;
-    padding: 30px;
-    border-radius: 20px;
+function respostaSelecionada(opcaoSelecionada) {
+    const afirmacoes = opcaoSelecionada.afirmacao;
+    historiaFinal += afirmacoes + " ";
+    atual++;
+    mostraPergunta();
 }
 
-h1{
-    color: var(--cor-destaque);
-    text-shadow: var(--sombra-neon);
-    font-size: 2rem;
-    margin-bottom: 20px;
+function mostraResultado() {
+    caixaPerguntas.textContent = "Em 2049...";
+    textoResultado.textContent = historiaFinal;
+    caixaAlternativas.textContent = "";
 }
 
-button {
-    background: linear-gradient(135deg, var(--cor-secundaria), var(--cor-destaque2));
-    color: var(--cor-texto);
-    border: none;
-    border-radius: 15px;
-    padding: 15px 25px;
-    margin: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-    letter-spacing: 1px;
-    box-shadow: 0 0 10px rgba(43, 222, 253, 0.3);
-}
-
-button:hover{
-    background: linear-gradient(135deg, var(--cor-destaque), var(--cor-destaque2));
-    color: #fff;
-    box-shadow: 0 0 20px var(--cor-destaque), 0 0 30px var(--cor-destaque2);
-    transform: scale(1.05);
-}
+mostraPergunta();
